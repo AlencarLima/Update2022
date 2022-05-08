@@ -41,6 +41,7 @@ namespace SalesWebMvc
                    options.UseMySql(Configuration.GetConnectionString("SalesWebMvcContext"), builder =>
                    builder.MigrationsAssembly("SalesWebMvc")));
 
+            //SISTEMA DE GESTAO DE DEPENDENCIAS
             services.AddScoped<SeedingService>();
             services.AddScoped<SellerService>();
             services.AddScoped<DepartmentService>(); //para registrar a dependencia do service
