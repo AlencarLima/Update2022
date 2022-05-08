@@ -26,7 +26,7 @@ namespace SalesWebMvc.Data
             }
 
             Department d1 = new Department(1, "Computers");
-            Department d2 = new Department(2, "Electronics");
+            Department d2 = new Department(2, "Eletronics");
             Department d3 = new Department(3, "Fashion");
             Department d4 = new Department(4, "Books");
 
