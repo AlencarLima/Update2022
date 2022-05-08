@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Data;
+using SalesWebMvc.Services.Exceptions;
 
 namespace SalesWebMvc.Services
 {
@@ -37,6 +38,23 @@ namespace SalesWebMvc.Services
             var obj = _context.Seller.Find(id);
             _context.Seller.Remove(obj); //método que remove o obj
             _context.SaveChanges(); //confirmar a remoção e salva-la
+        }
+
+        public void Update(Seller obj)
+        {
+            if (!_context.Seller.Any(x => x.Id == obj.Id)) //any serve para testar se há algum registro no banco de dados com a configuração inserida
+            {
+                throw new NotFoundException("Id not found");
+            }
+            try
+            {
+                _context.Update(obj);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException e) //intercepta uma excessão do nível de acesso a dados
+            {
+                throw new DbConcurrencyException(e.Message); //relança a excessão a nível de acesso de serviço (segrega camadas)
+            }
         }
     }
 }
