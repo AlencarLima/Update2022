@@ -18,38 +18,38 @@ namespace SalesWebMvc.Services
             _context = context;
         }
 
-        public List<Seller> FindAll()
+        public async Task<List<Seller>> FindAllAsync()
         {
-            return _context.Seller.ToList();
+            return await _context.Seller.ToListAsync();
         }
         
-        public void Insert(Seller obj)
+        public async Task InsertAsync(Seller obj)
         {
             _context.Add(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Seller FindById(int id) //procurar um vendedor por id
+        public async Task<Seller> FindByIdAsync(int id) //procurar um vendedor por id
         {
-            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
+            return await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(obj => obj.Id == id);
         }
-        public void Remove(int id)  //remover o vendedor
+        public async Task RemoveAsync(int id)  //remover o vendedor
         {
-            var obj = _context.Seller.Find(id);
+            var obj = await _context.Seller.FindAsync(id);
             _context.Seller.Remove(obj); //método que remove o obj
-            _context.SaveChanges(); //confirmar a remoção e salva-la
+            _context.SaveChangesAsync(); //confirmar a remoção e salva-la
         }
 
-        public void Update(Seller obj)
+        public async Task UpdateAsync(Seller obj)
         {
-            if (!_context.Seller.Any(x => x.Id == obj.Id)) //any serve para testar se há algum registro no banco de dados com a configuração inserida
+            if (! await _context.Seller.AnyAsync(x => x.Id == obj.Id)) //any serve para testar se há algum registro no banco de dados com a configuração inserida
             {
                 throw new NotFoundException("Id not found");
             }
             try
             {
                 _context.Update(obj);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException e) //intercepta uma excessão do nível de acesso a dados
             {
